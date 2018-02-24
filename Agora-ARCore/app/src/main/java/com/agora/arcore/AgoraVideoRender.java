@@ -44,6 +44,11 @@ public class AgoraVideoRender implements IVideoSink {
     }
 
     @Override
+    public long getEGLContextHandle() {
+        return 0;
+    }
+
+    @Override
     public int getBufferType() {
         return MediaIO.BufferType.BYTE_BUFFER.intValue();
     }

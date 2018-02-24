@@ -28,18 +28,21 @@ import com.agora.arcore.rendering.PeerRenderer;
 import com.agora.arcore.rendering.PlaneRenderer;
 import com.agora.arcore.rendering.PointCloudRenderer;
 import com.google.ar.core.Anchor;
+import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
+import com.google.ar.core.Point;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
-import com.google.ar.core.Trackable.TrackingState;
+import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.UnavailableApkTooOldException;
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -67,6 +70,8 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
     // Rendering. The Renderers are created here, and initialized when the GL surface is created.
     private GLSurfaceView mSurfaceView;
 
+    private boolean installRequested;
+
     private Session mSession;
     private GestureDetector mGestureDetector;
     private Snackbar mMessageSnackbar;
@@ -82,8 +87,8 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
     private final float[] mAnchorMatrix = new float[16];
 
     // Tap handling and UI.
-    private final ArrayBlockingQueue<MotionEvent> mQueuedSingleTaps = new ArrayBlockingQueue<>(16);
-    private final ArrayList<Anchor> mAnchors = new ArrayList<>();
+    private final ArrayBlockingQueue<MotionEvent> queuedSingleTaps = new ArrayBlockingQueue<>(16);
+    private final ArrayList<Anchor> anchors = new ArrayList<>();
 
     private RtcEngine mRtcEngine;
     private Handler mSenderHandler;
@@ -111,25 +116,29 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
         mDisplayRotationHelper = new DisplayRotationHelper(/*context=*/ this);
 
         // Set up tap listener.
-        mGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                onSingleTap(e);
-                return true;
-            }
+        mGestureDetector =
+                new GestureDetector(
+                        this,
+                        new GestureDetector.SimpleOnGestureListener() {
+                            @Override
+                            public boolean onSingleTapUp(MotionEvent e) {
+                                onSingleTap(e);
+                                return true;
+                            }
 
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return true;
-            }
-        });
+                            @Override
+                            public boolean onDown(MotionEvent e) {
+                                return true;
+                            }
+                        });
 
-        mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return mGestureDetector.onTouchEvent(event);
-            }
-        });
+        mSurfaceView.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return mGestureDetector.onTouchEvent(event);
+                    }
+                });
 
         // Set up renderer.
         mSurfaceView.setPreserveEGLContextOnPause(true);
@@ -138,37 +147,7 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
         mSurfaceView.setRenderer(this);
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
-        Exception exception = null;
-        String message = null;
-        try {
-            mSession = new Session(/* context= */ this);
-        } catch (UnavailableArcoreNotInstalledException e) {
-            message = "Please install ARCore";
-            exception = e;
-        } catch (UnavailableApkTooOldException e) {
-            message = "Please update ARCore";
-            exception = e;
-        } catch (UnavailableSdkTooOldException e) {
-            message = "Please update this app";
-            exception = e;
-        } catch (Exception e) {
-            message = "This device does not support AR";
-            exception = e;
-        }
-
-        if (message != null) {
-            showSnackbarMessage(message, true);
-            Log.e(TAG, "Exception creating session", exception);
-            return;
-        }
-
-        // Create default config and check if supported.
-        Config config = new Config(mSession);
-        if (!mSession.isSupported(config)) {
-            showSnackbarMessage("This device does not support AR", true);
-        }
-        mSession.configure(config);
-
+        installRequested = false;
         initRtcEngine();
     }
 
@@ -176,20 +155,60 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
     protected void onResume() {
         super.onResume();
 
-        // ARCore requires camera permissions to operate. If we did not yet obtain runtime
-        // permission on Android M and above, now is a good time to ask the user for it.
-        if (CameraPermissionHelper.hasCameraPermission(this)) {
-            if (mSession != null) {
-                showLoadingMessage();
-                // Note that order matters - see the note in onPause(), the reverse applies here.
-                mSession.resume();
+        if (mSession == null) {
+            Exception exception = null;
+            String message = null;
+            try {
+                switch (ArCoreApk.getInstance().requestInstall(this, !installRequested)) {
+                    case INSTALL_REQUESTED:
+                        installRequested = true;
+                        return;
+                    case INSTALLED:
+                        break;
+                }
+
+                // ARCore requires camera permissions to operate. If we did not yet obtain runtime
+                // permission on Android M and above, now is a good time to ask the user for it.
+                if (!CameraPermissionHelper.hasCameraPermission(this)) {
+                    CameraPermissionHelper.requestCameraPermission(this);
+                    return;
+                }
+
+                mSession = new Session(/* context= */ this);
+            } catch (UnavailableArcoreNotInstalledException
+                    | UnavailableUserDeclinedInstallationException e) {
+                message = "Please install ARCore";
+                exception = e;
+            } catch (UnavailableApkTooOldException e) {
+                message = "Please update ARCore";
+                exception = e;
+            } catch (UnavailableSdkTooOldException e) {
+                message = "Please update this app";
+                exception = e;
+            } catch (Exception e) {
+                message = "This device does not support AR";
+                exception = e;
             }
-            mSurfaceView.onResume();
-            mDisplayRotationHelper.onResume();
-        } else {
-            CameraPermissionHelper.requestCameraPermission(this);
+
+            if (message != null) {
+                showSnackbarMessage(message, true);
+                Log.e(TAG, "Exception creating session", exception);
+                return;
+            }
+
+            // Create default config and check if supported.
+            Config config = new Config(mSession);
+            if (!mSession.isSupported(config)) {
+                showSnackbarMessage("This device does not support AR", true);
+            }
+            mSession.configure(config);
         }
-        checkSelfPermissions();
+
+        showLoadingMessage();
+        // Note that order matters - see the note in onPause(), the reverse applies here.
+        mSession.resume();
+        mSurfaceView.onResume();
+        mDisplayRotationHelper.onResume();
     }
 
     @Override
@@ -279,7 +298,7 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
 
     private void onSingleTap(MotionEvent e) {
         // Queue tap if there is space. Tap is lost if queue is full.
-        mQueuedSingleTaps.offer(e);
+        queuedSingleTaps.offer(e);
     }
 
     @Override
@@ -345,25 +364,27 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
 
             // Handle taps. Handling only one tap per frame, as taps are usually low frequency
             // compared to frame rate.
-            MotionEvent tap = mQueuedSingleTaps.poll();
+            MotionEvent tap = queuedSingleTaps.poll();
             if (tap != null && camera.getTrackingState() == TrackingState.TRACKING) {
                 for (HitResult hit : frame.hitTest(tap)) {
                     // Check if any plane was hit, and if it was hit inside the plane polygon
                     Trackable trackable = hit.getTrackable();
-                    if (trackable instanceof Plane
-                            && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    // Creates an anchor if a plane or an oriented point was hit.
+                    if ((trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose()))
+                            || (trackable instanceof Point
+                            && ((Point) trackable).getOrientationMode()
+                            == Point.OrientationMode.ESTIMATED_SURFACE_NORMAL)) {
+                        // Hits are sorted by depth. Consider only closest hit on a plane or oriented point.
                         // Cap the number of objects created. This avoids overloading both the
                         // rendering system and ARCore.
-                        if (mAnchors.size() >= 20) {
-                            mAnchors.get(0).detach();
-                            mAnchors.remove(0);
+                        if (anchors.size() >= 20) {
+                            anchors.get(0).detach();
+                            anchors.remove(0);
                         }
                         // Adding an Anchor tells ARCore that it should track this position in
-                        // space. This anchor is created on the Plane to place the 3d model
+                        // space. This anchor is created on the Plane to place the 3D model
                         // in the correct position relative both to the world and to the plane.
-                        mAnchors.add(hit.createAnchor());
-
-                        // Hits are sorted by depth. Consider only closest hit on a plane.
+                        anchors.add(hit.createAnchor());
                         break;
                     }
                 }
@@ -420,7 +441,7 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
             float scaleFactor = 1.0f;
 
             int i = 0;
-            for (Anchor anchor : mAnchors) {
+            for (Anchor anchor : anchors) {
                 if (anchor.getTrackingState() != TrackingState.TRACKING) {
                     continue;
                 }
