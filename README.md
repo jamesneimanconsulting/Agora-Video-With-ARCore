@@ -12,7 +12,7 @@ With this sample app, you can:
 ## Running the App
 First, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID. Update "res/string.xml" with your App ID.
 
-Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/blog/download/). Unzip the downloaded SDK package and copy the **agora-rtc-sdk.jar** to the "Agora-ARCore/app/libs" and **agora-rtc-sdk.jar** to the "Agora-ARCore/app/libs", **armeabi-v7a/libagora-rtc-sdk-jni.so** to  "Agora-ARCore/app/src/main/jniLibs/armeabi-v7a" folder in project.
+Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/blog/download/). Unzip the downloaded SDK package and copy the **agora-rtc-sdk.jar** to the "Agora-ARCore/app/libs" and **armeabi-v7a/libagora-rtc-sdk-jni.so** to  "Agora-ARCore/app/src/main/jniLibs/armeabi-v7a" folder in project.
 
 > Custom media device protocols are provided from 2.1.0
 
