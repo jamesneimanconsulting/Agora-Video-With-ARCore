@@ -69,13 +69,10 @@ This sample application requires two devices, and works in conjunction with the 
 - [Set Permissions](#set-permissions)
 - [Create Visual Assets and Design the User Interface](#create-visual-assets-and-design-the-user-interface)
 - [Declare the Activity Class and Define Global Variables](#declare-the-activity-class-and-define-global-variables)
-- [Create Override Methods](#create-override-methods)
+- [Create Screen and Permission Override Methods](#create-screen-and-permission-override-methods)
+- [Create Interaction and Rendering Override Callbacks](#create-interaction-and-rendering-override-callbacks)
 - [Create the initRtcEngine() Method](#create-the-initrtcengine-method)
-- [Create the showSnackbarMessage() Method](#create-the-showsnackbarmessage-method)
-- [Show and Hide Loading Message Methods](#show-and-hide-loading-message-methods)
-- [Create the printLog() Method](#create-the-printlog-method)
-- [Create the sendARViewMessage() Method](#create-the-sendarviewmessage-method)
-- [Create the sendARView() Method](#create-the-sendarview-method)
+- [Create Message Handling Methods](#create-message-handling-methods)
 - [Create the addRemoteRender() Method](#create-the-addremoterender-method)
 - [Set Permission Variables and Methods](#set-permission-variables-and-methods)
 - [Add Button Methods](#add-button-methods)
@@ -287,7 +284,7 @@ Variable|Description
     private List<AgoraVideoRender> mRemoteRenders = new ArrayList<>(20);
 ```
 
-### Create Override Methods
+### Create Screen and Permission Override Methods
 
 The sample application uses superclass override methods, to initialize the application and detect application state changes.
 
@@ -297,10 +294,6 @@ The sample application uses superclass override methods, to initialize the appli
 - [Override the onDestroy() Method](#override-the-ondestroy-method)
 - [Override the onRequestPermissionsResult() Method](#override-the-onrequestpermissionsresult-method)
 - [Override the onWindowFocusChanged() Method](#override-the-onwindowfocuschanged-method)
-- [Create the onSingleTap() Method](#create-the-onsingletap-method)
-- [Override the onSurfaceCreated() Method](#override-the-onsurfacecreated-method)
-- [Override the onSurfaceChanged() Method](#override-the-onsurfacechanged-method)
-- [Override the onDrawFrame() Method](#override-the-ondrawframe-method)
 
 #### Override the onCreate() Method
 
@@ -617,6 +610,12 @@ Ensure the screen stays on by invoking `getWindow().addFlags()`.
         }
     }
 ```
+### Create Interaction and Rendering Override Methods
+
+- [Create the onSingleTap() Method](#create-the-onsingletap-method)
+- [Override the onSurfaceCreated() Method](#override-the-onsurfacecreated-method)
+- [Override the onSurfaceChanged() Method](#override-the-onsurfacechanged-method)
+- [Override the onDrawFrame() Method](#override-the-ondrawframe-method)
 
 #### Create the onSingleTap() Method
 
@@ -1112,7 +1111,15 @@ Complete the method by joining the channel using `mRtcEngine.joinChannel()`.
             
 ```
 
-### Create the showSnackbarMessage() Method
+Create Message Handling Methods
+
+- [Create the showSnackbarMessage() Method](#create-the-showsnackbarmessage-method)
+- [Show and Hide Loading Message Methods](#show-and-hide-loading-message-methods)
+- [Create the printLog() Method](#create-the-printlog-method)
+- [Create the sendARViewMessage() Method](#create-the-sendarviewmessage-method)
+- [Create the sendARView() Method](#create-the-sendarview-method)
+
+#### Create the showSnackbarMessage() Method
 
 Create `mMessageSnackbar` from the UI the using `Snackbar.make` and `AgoraARCoreActivity.this.findViewById` and set the background color to `0xbf323232`.
 
@@ -1147,7 +1154,7 @@ Complete the method by displaying `mMessageSnackbar` by using `show()`.
         mMessageSnackbar.show();
 ```
 
-### Show and Hide Loading Message Methods
+#### Show and Hide Loading Message Methods
 
 The `showLoadingMessage()` method runs on the UI thread. Within the `run()` method, invoke `showSnackbarMessage()` to display the loading message.
 
@@ -1177,7 +1184,7 @@ The `hideLoadingMessage()` method also runs on the UI thread. Within the `run()`
     }
 ```
 
-### Create the printLog() Method
+#### Create the printLog() Method
 
 The `printLog()` method is used throughout the sample application to log error messages and debug messages by using `Log.e()`.
 
@@ -1187,7 +1194,7 @@ The `printLog()` method is used throughout the sample application to log error m
     }
 ```
 
-### Create the sendARViewMessage() Method
+#### Create the sendARViewMessage() Method
 
 The `sendARViewMessage()` method handles creation and sending of an AR image. 
 
@@ -1272,7 +1279,7 @@ Complete the method by retrieving the `Message` object using `Message.obtain()` 
         mSenderHandler.sendMessage(message);
 ```
 
-### Create the sendARView() Method
+#### Create the sendARView() Method
 
 The `sendARView()` method sends the image snapshot of the AR view specified in the paramater `bitmap`.
 
