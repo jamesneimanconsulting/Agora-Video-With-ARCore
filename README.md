@@ -1031,7 +1031,7 @@ At the end of the method, create and start a new handler `thread` using `new Han
         };
 ```
 
-1. Create a new `IRtcEngineEventHandler` object and add the following event listeners:
+7. Create a new `IRtcEngineEventHandler` object and add the following event listeners:
 
 Event Listener|Description|Breakdown
 ---|---|---
@@ -1081,7 +1081,7 @@ Event Listener|Description|Breakdown
             };
 ```
 
-2. Create the Agora RTC engine using `RtcEngine.create()` and apply the following settings:
+8. Create the Agora RTC engine using `RtcEngine.create()` and apply the following settings:
 
 Setting|Method
 ---|---
@@ -1094,7 +1094,7 @@ Set the client role to live broadcaster|`mRtcEngine.setClientRole()`
 Set the video source to `mSource`|`mRtcEngine.setVideoSource()`
 Set the local video renderer to `mRender`| `mRtcEngine.setLocalVideoRenderer()`
 
-3. Complete the method by joining the channel using `mRtcEngine.joinChannel()`.
+9. Complete the method by joining the channel using `mRtcEngine.joinChannel()`.
 
 ``` Java
             mRtcEngine = RtcEngine.create(this, getString(R.string.private_broadcasting_app_id), mRtcEventHandler);
