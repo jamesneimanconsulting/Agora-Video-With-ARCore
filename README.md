@@ -1,38 +1,44 @@
-# Agora Video With ARCore
+# Agora Video with ARCore
 
-This tutorial enables you to quickly get started in your development efforts to create an Android app with live video chat using ARCore and the Agora Video SDK. With this sample app you can:
+This tutorial shows you how to create an Android app with live video chat using Google's ARCore platform and the Agora Video SDK.
 
-- Send a captured image from ARCore to the live video channel
-- Render video frames of a remote user in an ARCore session
+With this sample app, you can:
+
+- Send a captured image from ARCore to the live video channel.
+- Render video frames of a remote user in an ARCore session.
 
 ## Prerequisites
 
 * Android Studio 3.0.1 or above.
 * Android SDK Platform version 7.0 (API level 24) or above.
-* Physical [Android device with ARCore support](https://developers.google.com/ar/discover/) (e.g. Nexus 5X). A real device is recommended because some simulators have missing functionality or lack the performance necessary to run the sample.
+* A physical [Android device with ARCore support](https://developers.google.com/ar/discover/), for example, a Nexus 5X. A real device is recommended because some simulators have missing functionality or lack the performance necessary to run the sample.
 
 ## Quick Start
 This section shows you how to prepare, build, and run the sample application.
 
 ### Create an Account and Obtain an App ID
-In order to build and run the sample application you must obtain an App ID: 
+To build and run the sample application, first obtain an app ID: 
 
-1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
-2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
-3. Locate the file **app/src/main/res/values/strings.xml** and replace <#YOUR APP ID#> with the App ID in the dashboard.
+1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the sign-up process, you are redirected to the dashboard.
+2. Navigate in the dashboard tree on the left to **Projects** > **Project List**.
+3. Locate the file `app/src/main/res/values/strings.xml` and replace <#YOUR APP ID#> with the app ID in the dashboard.
 
 ```xml
 <string name="private_broadcasting_app_id"><#YOUR APP ID#></string>
 ```
 
-### Integrate the Agora Video SDK into the sample project
-The SDK must be integrated into the sample project before it can opened and built. There are two methods for integrating the Agora Video SDK into the sample project. The first method uses JCenter to automatically integrate the SDK files. The second method requires you to manually copy the SDK files to the project.
+### Integrate the Agora Video SDK into the Sample Project
+To use the Agora Video SDK, you must first integrate the Agora Video SDK into the sample project. 
+
+There are two methods for integrating the Agora Video SDK into the sample project:
+- Method 1 uses JCenter to automatically integrate the SDK files.
+- In Method 2, you manually copy the SDK files to the project.
 
 **Note:** Custom media device protocols are available in the Agora Video SDK 2.1.0 and above.
 
-#### Method 1 - Integrate the SDK Automatically Using JCenter (Recommended)
+#### Method 1. Integrate the SDK Automatically Using JCenter (Recommended)
 
-1. Clone this repository.
+1. Clone the repository.
 2. Open **app/build.gradle** and add the following line to the `dependencies` list:
 
 ```
@@ -43,24 +49,24 @@ dependencies {
 }
 ```
 
-#### Method 2 - Manually copy the SDK files
+#### Method 2. Manually Copy the SDK Files
 
-1. Clone this repository.
+1. Clone the repository.
 2. Download the Agora Video SDK from [Agora.io SDK](https://www.agora.io/en/download/).
 3. Unzip the downloaded SDK package.
 4. Copy the `agora-rtc-sdk.jar` file from the **libs** folder of the downloaded SDK package to the **/apps/libs** folder of the sample application.
-5. Copy the .so files from the **armeabi-v7a** folder of the downloaded SDK package to the **/app/src/main/jniLibs/armeabi-v7a** folder of the sample application.
+5. Copy the `.so` files from the **armeabi-v7a** folder of the downloaded SDK package to the **/app/src/main/jniLibs/armeabi-v7a** folder of the sample application.
 
 
 ### Using the Sample Application
 
-This sample application requires two devices, and works in conjunction with the [OpenLive](https://github.com/AgoraIO/OpenLive-Android) sample application. 
+This sample application works in conjunction with the [OpenLive](https://github.com/AgoraIO/OpenLive-Android) sample application. Note that it requires **two** devices.
 
-1. Run the sample application in Android Studio. Move the device until you find a horizontal surface.
+1. Run the sample application in Android Studio. Move the first device until you find a horizontal surface.
  
 2. Touch the plane indicator to add a virtual display screen to your AR session. The virtual display screen streams the video from the remote user.
 
-3. On a different device, launch the [OpenLive](https://github.com/AgoraIO/OpenLive-Android) sample application using the same App ID used in this project, and join the channel `arcore` as a broadcaster.
+3. On the second device, launch the [OpenLive](https://github.com/AgoraIO/OpenLive-Android) sample application using the same app ID used in this project, and join the channel `arcore` as a broadcaster.
 
 	The virtual display screen from step 2 displays the video broadcast sent from the remote user's [OpenLive](https://github.com/AgoraIO/OpenLive-Android) application.
 
@@ -70,7 +76,7 @@ This sample application requires two devices, and works in conjunction with the 
 - [Create Visual Assets and Design the User Interface](#create-visual-assets-and-design-the-user-interface)
 - [Declare the Activity Class and Define Global Variables](#declare-the-activity-class-and-define-global-variables)
 - [Create Screen and Permission Override Methods](#create-screen-and-permission-override-methods)
-- [Create Interaction and Rendering Override Callbacks](#create-interaction-and-rendering-override-callbacks)
+- [Create Interaction and Rendering Override Methods](#create-interaction-and-rendering-override-methods)
 - [Create the initRtcEngine() Method](#create-the-initrtcengine-method)
 - [Create Message Handling Methods](#create-message-handling-methods)
 - [Create the addRemoteRender() Method](#create-the-addremoterender-method)
@@ -78,7 +84,7 @@ This sample application requires two devices, and works in conjunction with the 
 - [Add Button Methods](#add-button-methods)
 - [Add App Setting Retrieval Methods](#add-app-setting-retrieval-methods)
 
-For details about the APIs used to develop this sample, see the [Agora.io Documentation version 2.2](https://docs.agora.io/en/2.2).
+For details about the APIs used to develop this sample, see the Agora.io Documentation version 2.2, available from the [Agora Developer Portal](https://docs.agora.io/en/2.2).
 
 ### Set Permissions
 
@@ -133,9 +139,9 @@ In the `AndroidManifest.xml` file, `uses-permissions` settings are added for the
 
 ### Create Visual Assets and Design the User Interface
 
-Add the `ic_launcher.png` icon asset to the */res/drawable* folder. This is a desktop icon for users to invoke the sample application.
+Add the `ic_launcher.png` icon asset to the **/res/drawable** folder. This is a desktop icon for users to invoke the sample application.
 
-The sample contains a single activity called *AgoraARCoreActivity* and its layout is defined in */layout/activity_main.xml*. 
+The sample contains a single activity called `AgoraARCoreActivity`, and its layout is defined in `/layout/activity_main.xml`. 
 
 Component|Description
 ----|----
@@ -171,7 +177,7 @@ The following imports define the Agora API that provides Agora RTC Engine functi
 
 ### Declare the Activity Class and Define Global Variables
 
-The `AgoraARCoreActivity` class extends the `AppCompatActivity` class and uses protocol methods from `GLSurfaceView.Renderer`.
+The `AgoraARCoreActivity` class extends the `AppCompatActivity` class and uses protocol methods from the `GLSurfaceView.Renderer`.
 
 The remaining code samples are within the `AgoraARCoreActivity` class.
 
@@ -185,15 +191,15 @@ public class AgoraARCoreActivity extends AppCompatActivity implements GLSurfaceV
 
 The `AgoraARCoreActivity` class declares several global variables for use in the sample application.
 
-The following private variables manage Open GL rendering, an installation flag, the AR session, gesture and message handling.
+The following private variables manage Open GL rendering, an installation flag, the AR session, gestures, and message handling.
 
 Variable|Description
 ---|---
-`mSurfaceView`|The open GL rendering view
-`installRequested`|Boolean flag to determine if an install is required
-`mSession`|The AR session
-`mGestureDetector`|Gesture detection object
-`mMessageSnackbar`|Message container object
+`mSurfaceView`|The Open GL rendering view.
+`installRequested`|A Boolean flag to determine if an install is required.
+`mSession`|The AR session.
+`mGestureDetector`|A gesture detection object.
+`mMessageSnackbar`|A message container object.
 
 ``` Java
     private static final String TAG = AgoraARCoreActivity.class.getSimpleName();
@@ -212,13 +218,13 @@ The following private variables help manage AR objects and rendering.
 
 Variable|Description
 ---|---
-`mDisplayRotationHelper`|Helper class to detect AR Rotation
-`mBackgroundRenderer`|Handles background rendering
-`mVirtualObject`|Renderer for the main AR object
-`mVirtualObjectShadow`|Renderer for the AR object shadow
-`mPlaneRenderer`|Renderer for the AR plane
-`mPointCloud`|Renderer for the point cloud
-`mAnchorMatrix`|Help manage per-frame rendering
+`mDisplayRotationHelper`|A helper class to detect AR rotation.
+`mBackgroundRenderer`|Handles background rendering.
+`mVirtualObject`|A renderer for the main AR object.
+`mVirtualObjectShadow`|A renderer for the AR object shadow.
+`mPlaneRenderer`|A renderer for the AR plane.
+`mPointCloud`|A renderer for the point cloud.
+`mAnchorMatrix`|Helps manage per-frame rendering.
 
 ``` Java
     private DisplayRotationHelper mDisplayRotationHelper;
@@ -233,18 +239,18 @@ Variable|Description
     private final float[] mAnchorMatrix = new float[16];
 ```
 
-The following private variables are used for gestures, message handling, and video rendering.
+The following private variables are used for gestures, message handling, and video rendering:
 
 Variable|Description
 ---|---
-`queuedSingleTaps`|Single tap queue
-`anchors`|Array of anchors
-`mRtcEngine`|Agora RTC engine
-`mSenderHandler`|Message handler
-`SEND_AR_VIEW`|Constant for detecting if AR view should be sent
-`mSource`|Agora video source
-`mRender`|Agora video renderer
-`mSendBuffer`|Buffer for sending data
+`queuedSingleTaps`|A single-tap queue.
+`anchors`|An array of anchors.
+`mRtcEngine`|The Agora RTC engine.
+`mSenderHandler`|A message handler.
+`SEND_AR_VIEW`|A constant for detecting if the AR view should be sent.
+`mSource`|An Agora video source.
+`mRender`|An Agora video renderer.
+`mSendBuffer`|A buffer for sending data.
 
 ``` Java
     // Tap handling and UI.
@@ -259,17 +265,17 @@ Variable|Description
     private ByteBuffer mSendBuffer;
 ```
 
-The remaining private variables are used to handle what is displayed on screen, event handlers, and peer connections.
+The remaining private variables are used to handle what is displayed on the screen, event handlers, and peer connections.
 
 Variable|Description
 ---|---
-`mIsARMode`|Boolean to manage if the user is in AR mode
-`mHidePoint`|Boolean to manage if a point should be hidden
-`mHidePlane`|Boolean to manage if a plane should be hidden
-`mScaleFactor`|Float value to manage the factor to scale by
-`mRtcEventHandler`|RTC engine event handler
-`mPeerObject`|Renderer for the peer
-`mRemoteRenders`|Array of Agora Video Renderers for remote users
+`mIsARMode`|A Boolean to manage if the user is in AR mode.
+`mHidePoint`|A Boolean to manage if a point should be hidden.
+`mHidePlane`|A Boolean to manage if a plane should be hidden.
+`mScaleFactor`|A float value to manage the factor to scale by.
+`mRtcEventHandler`|An Agora RTC engine event handler.
+`mPeerObject`|A renderer for the peer.
+`mRemoteRenders`|An array of Agora video renderers for remote users.
 
 ``` Java
     private boolean mIsARMode;
@@ -286,7 +292,7 @@ Variable|Description
 
 ### Create Screen and Permission Override Methods
 
-The sample application uses superclass override methods, to initialize the application and detect application state changes.
+The sample application uses superclass override methods to initialize the application and detect application state changes.
 
 - [Override the onCreate() Method](#override-the-oncreate-method)
 - [Override the onResume() Method](#override-the-onresume-method)
@@ -297,7 +303,7 @@ The sample application uses superclass override methods, to initialize the appli
 
 #### Override the onCreate() Method
 
-The onCreate() is invoked once the activity is created. The `R.layout.activity_main` is applied as the screen layout using `setContentView()`.
+The `onCreate()` method is invoked once the activity is created. The `R.layout.activity_main` is applied as the screen layout using `setContentView()`.
 
 The `mSurfaceView` variable is with the `surfaceview` object from the UI layout.
 
@@ -313,11 +319,11 @@ The `mSurfaceView` variable is with the `surfaceview` object from the UI layout.
     }
 ```
 
-Initialize `mGestureDetector` using `new GestureDetector()` and apply event listeners for a single tap up motion and an on tap down motion using `onSingleTapUp()` `onDown()`.
+1. Initialize `mGestureDetector` using `new GestureDetector()` and apply event listeners for a single-tap up motion and an on-tap down motion using `onSingleTapUp()` `onDown()`.
 
-- If the gesture is a single tap up, invoke the `onSingleTap()` method.
+- If the gesture is a single-tap up motion, invoke the `onSingleTap()` method.
 
-- If the gesture is an on down tap gesture, return `true`.
+- If the gesture is an on-tap down motion, return `true`.
 
 ``` Java
         // Set up tap listener.
@@ -338,9 +344,9 @@ Initialize `mGestureDetector` using `new GestureDetector()` and apply event list
                         });
 ```
 
-Apply a touch listener to `mSurfaceView` using  `setOnTouchListener()`.
+2. Apply a touch listener to `mSurfaceView` using  `setOnTouchListener()`.
 
-In the listener object, set the on touch listener callback `onTouch()` returning the gesture's touch event `mGestureDetector.onTouchEvent()`.
+3. In the listener object, set the on-touch listener callback `onTouch()` to return the gesture's touch event `mGestureDetector.onTouchEvent()`.
 
 ``` Java
         mSurfaceView.setOnTouchListener(
@@ -352,15 +358,15 @@ In the listener object, set the on touch listener callback `onTouch()` returning
                 });
 ```
 
-Set up `mSurfaceView` settings using the following methods.
+4. Set up `mSurfaceView` settings using the following methods:
 
 Method|Description
 ---|---
-`setPreserveEGLContextOnPause(true)`|Preserves the EGL content when paused
-`setEGLContextClientVersion(2)`|Sets the EGL context version to 2
-`setEGLConfigChooser(8, 8, 8, 8, 16, 0)`|Configures the EGL plane with an alpha for blending
-`setRenderer(this)`|Sets the renderer for the surface view
-`setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY)`|Sets the render mode to continuously render
+`setPreserveEGLContextOnPause(true)`|Preserves the EGL content when paused.
+`setEGLContextClientVersion(2)`|Sets the EGL context version to `2`.
+`setEGLConfigChooser(8, 8, 8, 8, 16, 0)`|Configures the EGL plane with an alpha for blending.
+`setRenderer(this)`|Sets the renderer for the surface view.
+`setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY)`|Sets the render mode to continuously render.
 
 ``` Java
         // Set up renderer.
@@ -371,7 +377,7 @@ Method|Description
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 ```
 
-The `onCreate()` method completes by setting `installRequested` to false and initializing the Agora RTC engine using `initRtcEngine()`.
+The `onCreate()` method completes by setting `installRequested` to `false` and initializing the Agora RTC engine using `initRtcEngine()`.
 
 ``` Java
         installRequested = false;
@@ -380,11 +386,11 @@ The `onCreate()` method completes by setting `installRequested` to false and ini
 
 #### Override the onResume() Method
 
-When the activity resumes, check if `mSession` is `null`.
+When the activity resumes, check if the `mSession` is `null`.
 
 If the session is `null`:
 
-- Check if the `ArCoreApk` instance needs an install, using `requestInstall()`. If an install is needed, set `installRequested` to `true`.
+- Check if the `ArCoreApk` instance needs an install using `requestInstall()`. If an install is needed, set the `installRequested` to `true`.
 
 - Check for camera permissions by calling `CameraPermissionHelper.hasCameraPermission()`. If camera permissions need to be requested, invoke `CameraPermissionHelper.requestCameraPermission()`.
 
@@ -420,14 +426,14 @@ If the session is `null`:
         }
 ```
 
-If an exception occurs, display one of the following errors by passing a string to `showSnackbarMessage()` and log the exception.
+If an exception occurs, display one of the following errors by passing a string to `showSnackbarMessage()` and log the exception:
 
 Exception|Description
 ---|---
 `UnavailableArcoreNotInstalledException`|ARCore is not supported. Tell the user to install ARCore.
 `UnavailableApkTooOldException`|The APK is too old. Tell the user to update ARCore.
 `UnavailableSdkTooOldException`|The SDK is too old. Tell the user to update the application.
-Default exception|Tell the user the device does not support AR.
+Default exception|Tell the user that the device does not support AR.
 
 
 ``` Java
@@ -464,13 +470,13 @@ Once the session is created, set the configuration using `mSession.configure()`.
             mSession.configure(config);
 ```
 
-Complete the `onResume()` method by invoking `showLoadingMessage()` and ensure the session and associated objects are resumed:
+Complete the `onResume()` method by invoking `showLoadingMessage()`. Ensure that the session and associated objects are resumed, doing the following in the order shown:
 
-- Resume the `mSession` using `resume()`
-- Invoke `onResume()` on `mSurfaceView`
-- Invoke `onResume()` on `mDisplayRotationHelper`
+1. Resume the `mSession` using `resume()`.
+2. Invoke `onResume()` on `mSurfaceView`.
+3. Invoke `onResume()` on `mDisplayRotationHelper`.
 
-**Note:** Resuming the objects in this order important, because `mSurfaceView` needs to query `mSession`.
+**Note:** Resuming the objects in the above order is important, because `mSurfaceView` needs to query `mSession`.
 
 ``` Java
         showLoadingMessage();
@@ -484,11 +490,11 @@ Complete the `onResume()` method by invoking `showLoadingMessage()` and ensure t
 
 When the activity invokes the `onPause()` method, pause the session and associated objects:
 
-- Pause `mDisplayRotationHelper` using `onPause()`
-- Pause `mSurfaceView` using `onPause()`
-- Pause `mSession` using `pause()`
+- Pause `mDisplayRotationHelper` using `onPause()`.
+- Pause `mSurfaceView` using `onPause()`.
+- Pause `mSession` using `pause()`.
 
-**Note:** Pausing the objects in this order important, because when `mSurfaceView` is active, it will continue to query `mSession`.
+**Note:** Pausing the objects in this order is important, because when `mSurfaceView` is active, it continues to query `mSession`.
 
 ``` Java
     @Override
@@ -507,11 +513,11 @@ When the activity invokes the `onPause()` method, pause the session and associat
 
 #### Override the onDestroy() Method
 
-When the activity calls the `onDestroy()` method, remove all the renderers from `mRtcEngine` by passing `null` into `mRtcEngine.setRemoteVideoRenderer()`.
+When the activity calls the `onDestroy()` method, remove all the renderers from the `mRtcEngine` by passing `null` into `mRtcEngine.setRemoteVideoRenderer()`.
 
-Clear all the remove renderers array by using `mRemoteRenders.clear()` and invoke `quit()` on `mSenderHandler.getLooper()`.
+Clear the remote renderers array by using `mRemoteRenders.clear()` and invoke `quit()` on `mSenderHandler.getLooper()`.
 
-Complete the method by destroying the RTC engine object by using `RtcEngine.destroy()`.
+Complete the method by destroying the Agora RTC engine object by using `RtcEngine.destroy()`.
 
 ``` Java
     @Override
@@ -554,8 +560,8 @@ Check for camera permissions by using `CameraPermissionHelper.hasCameraPermissio
     }
 ```
 
-- If the permission requested is `PERMISSION_REQ_ID_RECORD_AUDIO` and `results` is valid, check the app for camera permissions using `checkSelfPermission()`.
-- If the permission requested is `PERMISSION_REQ_ID_CAMERA` and `results` is valid, check the app for external storage permissions using `checkSelfPermission()`.
+- If the permission requested is `PERMISSION_REQ_ID_RECORD_AUDIO` and the `results` are valid, check the app for camera permissions using `checkSelfPermission()`.
+- If the permission requested is `PERMISSION_REQ_ID_CAMERA` and the `results` are valid, check the app for external storage permissions using `checkSelfPermission()`.
 
 ``` Java
         switch (requestCode) {
@@ -589,9 +595,9 @@ Check for camera permissions by using `CameraPermissionHelper.hasCameraPermissio
 
 #### Override the onWindowFocusChanged() Method
 
-If the window is in focus, set the view to full-screen using `getWindow().getDecorView().setSystemUiVisibility()`.
+If the window is in focus, set the view to full screen using `getWindow().getDecorView().setSystemUiVisibility()`.
 
-Ensure the screen stays on by invoking `getWindow().addFlags()`.
+To keep the screen on, invoke `getWindow().addFlags()`.
 
 ``` Java
     @Override
@@ -630,11 +636,11 @@ This method is invoked when a user applies a single tap to the screen. Queue the
 
 #### Override the onSurfaceCreated() Method
 
-This method is invoked when the surface view is created.
+The `onSurfaceCreated()` method is invoked when the surface view is created.
 
 Create the background texture using `mBackgroundRenderer.createOnGlThread()`.
 
-If `mSession` is not `null`, set the `mSession` texture using `mSession.setCameraTextureName()`.
+If the `mSession` is not `null`, set the `mSession` texture using `mSession.setCameraTextureName()`.
 
 ``` Java
     @Override
@@ -653,10 +659,10 @@ If `mSession` is not `null`, set the `mSession` texture using `mSession.setCamer
 
 Create the rendering objects `mVirtualObject` and `mVirtualObjectShadow` by using `createOnGlThread()` and set the material properties using `setMaterialProperties()`.
 
-- `mVirtualObject` uses the assets `andy.obj` and `andy.png`
-- `mVirtualObjectShadow` uses the assets `andy_shadow.obj` and `andy_shadow.png`
+- The `mVirtualObject` uses the assets `andy.obj` and `andy.png`.
+- The `mVirtualObjectShadow` uses the assets `andy_shadow.obj` and `andy_shadow.png`.
 
-If there is an error while creating the objects, log the error using `Log.e()`.
+If an error occurs while creating the objects, log the error using `Log.e()`.
 
 ``` Java
         // Prepare the other rendering objects.
@@ -714,11 +720,11 @@ Invoke the surface changed handler for `mDisplayRotationHelper` using `onSurface
 
 The `onDrawFrame()` method is invoked when a frame is drawn.
 
-Clear the previous frame using `GLES20.glClear()`. This prevents the driver from loading pixels from the previous frame.
+Clear the previous frame using `GLES20.glClear()` to prevent the driver from loading pixels from the previous frame.
 
-Ensure `mSession` is not `null` before continuing. Update the AR session if needed by using `mDisplayRotationHelper.updateSessionIfNeeded()`.
+Check that `mSession` is not `null` before continuing. If necessary, update the AR session by using `mDisplayRotationHelper.updateSessionIfNeeded()`.
 
-The remaining code in this section is encapsulated within the `try` statement. If there is an error log the exception using `Log.e()`.
+The remaining code in this section is encapsulated within the `try` statement. If an error occurs, log the exception using `Log.e()`.
 
 ``` Java
     @Override
@@ -753,9 +759,9 @@ Set the `frame` and `camera` from the session using `mSession.update()` and `fra
             Camera camera = frame.getCamera();
 ```
 
-Retrieve the next tap event by using `queuedSingleTaps.poll()`. Ensure that the `tap` is valid and the `camera` is in a `TRACKING` state.
+Retrieve the next tap event by using `queuedSingleTaps.poll()`. Check that the `tap` is valid and the `camera` is in a `TRACKING` state.
 
-For each tap, perform a hit tests within the frame using `frame.hitTest()`. If any plane or orientation point is hit, ensure the number of `anchors` remains `20` or less by detaching and removing the first object using `detach()` and `remove()`.
+For each tap, perform a hit test within the frame using `frame.hitTest()`. If any plane or orientation point is hit, ensure the number of `anchors` remains `20` or less by detaching and removing the first object using `detach()` and `remove()`.
 
 Create the new anchor from the `hit` by using `hit.createAnchor()` and add it to the anchor array using `anchors.add()`.
 
@@ -791,7 +797,7 @@ Create the new anchor from the `hit` by using `hit.createAnchor()` and add it to
 
 Draw the frame into the background renderer using `mBackgroundRenderer.draw()`.
 
-Check that the camera is tracking, before drawing the 3D objects.
+Check that the camera is tracking before drawing 3D objects.
 
 ``` Java
             // Draw background.
@@ -820,13 +826,13 @@ Compute the light intensity from the `frame` by using `frame.getLightEstimate().
             final float lightIntensity = frame.getLightEstimate().getPixelIntensity();
 ```
 
-If the view should show the point cloud, display the tracked points.
+To show the point cloud in the view, display the tracked points:
 
-- Acquire the point cloud using `frame.acquirePointCloud()`
-- Update the point cloud using `mPointCloud.update()`
-- Draw the point cloud using `mPointCloud.draw()`
+- Acquire the point cloud using `frame.acquirePointCloud()`.
+- Update the point cloud using `mPointCloud.update()`.
+- Draw the point cloud using `mPointCloud.draw()`.
 
-Ensure that the point cloud is released after completion, using `pointCloud.release()`. This aids in memory allocation and garbage collection.
+For memory allocation and garbage collection, ensure that the point cloud is released after completion using `pointCloud.release()`.
 
 ``` Java
             if (isShowPointCloud()) {
@@ -866,15 +872,15 @@ If `isShowPlane()` is enabled, draw the planes onto the screen using `mPlaneRend
 
 Check that each `anchor` is `TRACKING` before displaying the touch anchors.
 
-If AR mode is true:
+If the AR mode is true:
 
 - Update the model object `mVirtualObject` and its shadow `mVirtualObjectShadow` using `updateModelMatrix()`.
-- Draw both `mVirtualObject` and `mVirtualObjectShadow` onto the screen using `draw()`.
+- Draw both the `mVirtualObject` and the `mVirtualObjectShadow` onto the screen using `draw()`.
 
-If AR mode is false:
+If the AR mode is false:
 
-- Update the peer's model matrix using `mPeerObject.updateModelMatrix()`
-- Render the peer object using `mPeerObject.draw()`
+- Update the peer's model matrix using `mPeerObject.updateModelMatrix()`.
+- Render the peer object using `mPeerObject.draw()`.
 
 ``` Java
             // Visualize anchors created by touch.
@@ -921,9 +927,9 @@ Complete the method by sending an AR view message using `sendARViewMessage()`.
 
 The `initRtcEngine()` method initializes the Agora RTC engine.
 
-Initialize `mIsARMode`, `mHidePoint`, and `mHidePlane` to `true`.
+1. Initialize the `mIsARMode`, `mHidePoint`, and `mHidePlane` to `true`.
 
-Connect `modeButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, invoke `switchMode()`.
+2. Connect the `modeButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, invoke `switchMode()`.
 
 ``` Java
     private void initRtcEngine() {
@@ -944,7 +950,7 @@ Connect `modeButton` to the UI by using `findViewById()` and add a click event l
     }
 ```
 
-Connect `hidePointButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, invoke `showPointCloud()`.
+3. Connect the `hidePointButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, invoke `showPointCloud()`.
 
 
 ``` Java
@@ -957,7 +963,7 @@ Connect `hidePointButton` to the UI by using `findViewById()` and add a click ev
         });
 ```
 
-Connect `hidePlaneButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, invoke `showPlane()`.
+4. Connect the `hidePlaneButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, invoke `showPlane()`.
 
 ``` Java
         Button hidePlaneButton = findViewById(R.id.show_plane);
@@ -969,9 +975,9 @@ Connect `hidePlaneButton` to the UI by using `findViewById()` and add a click ev
         });
 ```
 
-Connect `zoomInButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, increment `mScaleFactor` by `0.2f` if it is less than or equal to `5.0f`.
+5. Connect  the `zoomInButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, increment `mScaleFactor` by `0.2f` if it is less than or equal to `5.0f`.
 
-Connect `zoomOutButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, decrement `mScaleFactor` by `0.2f` if it is greater than or equal to `0.1f`.
+6. Connect the `zoomOutButton` to the UI by using `findViewById()` and add a click event listener using `setOnClickListener()`. When the button is clicked, decrement `mScaleFactor` by `0.2f` if it is greater than or equal to `0.1f`.
 
 ``` Java
         Button zoomInButton = findViewById(R.id.zoom_in);
@@ -996,12 +1002,12 @@ Connect `zoomOutButton` to the UI by using `findViewById()` and add a click even
             }
         });
 ```
+The remaining code in this section is encapsulated within the `try` statement. The `try` statement initializes the Agora RTC engine, events, and settings
 
-The `try` statement initializes the Agora RTC engine, events, and settings. If it false, log the error using `printLog`.
+- If the `try` method is false, log the error using `printLog`.
 
-At the end of the method, create and start a new handler `thread` using `new HandlerThread()` and `thread.start()`. When `thread` receives a message, send the AR view using `sendARView` if the message type is `SEND_AR_VIEW`.
+At the end of the method, create and start a new handler `thread` using `new HandlerThread()` and `thread.start()`. When the `thread` receives a message, send the AR view using `sendARView` if the message type is `SEND_AR_VIEW`.
 
-The remaining code in this section is encapsulated within the `try` statement.
 
 ``` Java
         try {
@@ -1025,16 +1031,16 @@ The remaining code in this section is encapsulated within the `try` statement.
         };
 ```
 
-Create a new `IRtcEngineEventHandler` object and add the following event listeners:
+1. Create a new `IRtcEngineEventHandler` object and add the following event listeners:
 
-Event listener|Description|Breakdown
+Event Listener|Description|Breakdown
 ---|---|---
-`onJoinChannelSuccess`|Triggered when a user successfully joins a channel|Log the channel using `printLog()`.
-`onFirstRemoteVideoDecoded`|Triggered with the first remote video is decoded|Add a remote renderer for the user `uid` using `addRemoteRender()`.
-`onUserOffline`|Triggered with a user goes offline|Removes the user `uid` from `mRemoteRenders` using `remove()` and sets the remove view renderer to null for that user using `mRtcEngine.setRemoteVideoRenderer()`.
-`onUserJoined`|Triggers when a user joins a channel|Can be used to add logs or message alerts.
-`onError`|Triggers when there is an error|Logs the error using `printLog()`.
-`onWarning`|Triggers when there is a warning|Logs the warning using `printLog()`.
+`onJoinChannelSuccess`|Triggered when a user successfully joins a channel.|Log the channel using `printLog()`.
+`onFirstRemoteVideoDecoded`|Triggered when the first remote video is decoded.|Add a remote renderer for the user `uid` using `addRemoteRender()`.
+`onUserOffline`|Triggered when a user goes offline.|Removes the user `uid` from `mRemoteRenders` using `remove()` and sets the remove view renderer to null for that user using `mRtcEngine.setRemoteVideoRenderer()`.
+`onUserJoined`|Triggers when a user joins a channel.|Can be used to add logs or message alerts.
+`onError`|Triggers when there is an error.|Logs the error using `printLog()`.
+`onWarning`|Triggers when there is a warning.|Logs the warning using `printLog()`.
 
 ``` Java
             mRtcEventHandler = new IRtcEngineEventHandler() {
@@ -1075,7 +1081,7 @@ Event listener|Description|Breakdown
             };
 ```
 
-Create the RTC engine using `RtcEngine.create()` and apply the following settings:
+2. Create the Agora RTC engine using `RtcEngine.create()` and apply the following settings:
 
 Setting|Method
 ---|---
@@ -1088,7 +1094,7 @@ Set the client role to live broadcaster|`mRtcEngine.setClientRole()`
 Set the video source to `mSource`|`mRtcEngine.setVideoSource()`
 Set the local video renderer to `mRender`| `mRtcEngine.setLocalVideoRenderer()`
 
-Complete the method by joining the channel using `mRtcEngine.joinChannel()`.
+3. Complete the method by joining the channel using `mRtcEngine.joinChannel()`.
 
 ``` Java
             mRtcEngine = RtcEngine.create(this, getString(R.string.private_broadcasting_app_id), mRtcEventHandler);
@@ -1111,7 +1117,7 @@ Complete the method by joining the channel using `mRtcEngine.joinChannel()`.
             
 ```
 
-Create Message Handling Methods
+### Create Message Handling Methods
 
 - [Create the showSnackbarMessage() Method](#create-the-showsnackbarmessage-method)
 - [Show and Hide Loading Message Methods](#show-and-hide-loading-message-methods)
@@ -1123,7 +1129,7 @@ Create Message Handling Methods
 
 Create `mMessageSnackbar` from the UI the using `Snackbar.make` and `AgoraARCoreActivity.this.findViewById` and set the background color to `0xbf323232`.
 
-If `finishOnDismiss` is true, add an event listener to the `Dismiss` button. This button would invoke `mMessageSnackbar.dismiss()`. Ensure a dismissal callback is applied to `mMessageSnackbar`, which invokes the superclass' dismiss method by calling `super.onDismissed()`.
+If `finishOnDismiss` is true, add an event listener to the `Dismiss` button. This button invokes `mMessageSnackbar.dismiss()`. Make sure that a dismissal callback is applied to `mMessageSnackbar`, which invokes the `superclass dismiss` method by calling `super.onDismissed()`.
 
 Complete the method by displaying `mMessageSnackbar` by using `show()`.
 
@@ -1158,7 +1164,7 @@ Complete the method by displaying `mMessageSnackbar` by using `show()`.
 
 The `showLoadingMessage()` method runs on the UI thread. Within the `run()` method, invoke `showSnackbarMessage()` to display the loading message.
 
-The `hideLoadingMessage()` method also runs on the UI thread. Within the `run()` method, ensure `mMessageSnackbar` is not `null`. If `mMessageSnackbar` is `null`, dismiss it using `mMessageSnackbar.dismiss()`. Set `mMessageSnackbar` to `null` to complete the `run()` override method.
+The `hideLoadingMessage()` method also runs on the UI thread. Within the `run()` method, make sure `mMessageSnackbar` is not `null`. If `mMessageSnackbar` is `null`, dismiss it using `mMessageSnackbar.dismiss()`. Set `mMessageSnackbar` to `null` to complete the `run()` override method.
 
 
 ``` Java
@@ -1186,7 +1192,7 @@ The `hideLoadingMessage()` method also runs on the UI thread. Within the `run()`
 
 #### Create the printLog() Method
 
-The `printLog()` method is used throughout the sample application to log error messages and debug messages by using `Log.e()`.
+The `printLog()` method logs error messages and debugs messages using `Log.e()`.
 
 ``` Java
     private void printLog(String message) {
@@ -1196,15 +1202,13 @@ The `printLog()` method is used throughout the sample application to log error m
 
 #### Create the sendARViewMessage() Method
 
-The `sendARViewMessage()` method handles creation and sending of an AR image. 
+The `sendARViewMessage()` method handles the creation and sending of an AR image. 
 
-Begin by retrieving the height and width of the surface view using `mSurfaceView.getWidth()` and `mSurfaceView.getHeight()` and calculate the scene size by multiplying the two results.
+1. Begin by retrieving the height and width of the surface view using `mSurfaceView.getWidth()` and `mSurfaceView.getHeight()` and calculate the scene size by multiplying the two results.
 
-If `mSendBuffer` is `null`, create the object using `ByteBuffer.allocateDirect()` and set the order using `mSendBuffer.order()`.
+2. If `mSendBuffer` is `null`, create the object using `ByteBuffer.allocateDirect()` and set the order using `mSendBuffer.order()`.
 
-Initialize the buffer position to `0` using `mSendBuffer.position()`.
-
-The remaining code in this section are within the `sendARViewMessage()` method.
+3. Initialize the buffer position to `0` using `mSendBuffer.position()`.
 
 ``` Java
     private void sendARViewMessage(GL10 gl) {
@@ -1221,14 +1225,15 @@ The remaining code in this section are within the `sendARViewMessage()` method.
         
     }
 ```
+The remaining code in this section is within the `sendARViewMessage()` method:
 
-Read the pixels from `mSendBuffer` using `gl.glReadPixels()`.
+4. Read the pixels from `mSendBuffer` using `gl.glReadPixels()`.
 
-Generate `pixelsBuffer[]` and apply it to `mSendBuffer` by using `asIntBuffer().get()`.
+5. Generate `pixelsBuffer[]` and apply it to `mSendBuffer` by using `asIntBuffer().get()`.
 
-Create a `Bitmap` object using `Bitmap.createBitmap()` and set the pixels with `pixelsBuffer` using `bitmap.setPixels()`. Ensure `pixelsBuffer` is set to `null` for garbage collection.
+6. Create a `Bitmap` object using `Bitmap.createBitmap()` and set the pixels with `pixelsBuffer` using `bitmap.setPixels()`. Make sure `pixelsBuffer` is set to `null` for garbage collection.
 
-Copy the AR image pixels to `bitmap` using `bitmap.copyPixelsToBuffer()`.
+7. Copy the AR image pixels to `bitmap` using `bitmap.copyPixelsToBuffer()`.
 
 ``` Java
         gl.glReadPixels(0, 0, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, mSendBuffer);
@@ -1243,13 +1248,13 @@ Copy the AR image pixels to `bitmap` using `bitmap.copyPixelsToBuffer()`.
         bitmap.copyPixelsToBuffer(tmpBuffer);
 ```
 
-Convert the bitmap from OpenGL format to an Android-compatible bitmap.
+8. Convert the bitmap from OpenGL format to an Android-compatible bitmap.
 
-Iterate through `sceneSize` and convert the sBuffer[i] based on the original `sBuffer[i]` value.
+9. Iterate through `sceneSize` and convert the `sBuffer[i]` based on the original `sBuffer[i]` value.
 
-When the buffer conversion completes, return to the first location in `tmpBuffer` by using `tmpBuffer.rewind()`.
+10. When the buffer conversion completes, return to the first location in `tmpBuffer` by using `tmpBuffer.rewind()`.
 
-Copy the `tmpBuffer` pixels into `bitmap` using `bitmap.copyPixelsFromBuffer()`.
+11. Copy the `tmpBuffer` pixels into `bitmap` using `bitmap.copyPixelsFromBuffer()`.
 
 ``` Java
         // Making created bitmap (from OpenGL points) compatible with
@@ -1262,13 +1267,13 @@ Copy the `tmpBuffer` pixels into `bitmap` using `bitmap.copyPixelsFromBuffer()`.
         bitmap.copyPixelsFromBuffer(tmpBuffer);
 ```
 
-Create a new `Bitmap` object from `bitmap` using `bitmap.copy()`.
+12. Create a new `Bitmap` object from `bitmap` using `bitmap.copy()`.
 
-Complete the method by retrieving the `Message` object using `Message.obtain()` and sending the AR image by:
+13. Complete the method by retrieving the `Message` object using `Message.obtain()` and sending the AR image by:
 
-- Setting the message type to `SEND_AR_VIEW`
-- Setting the message object to the bitmap `result`
-- Send the image message by using `mSenderHandler.sendMessage()`.
+- Setting the message type to `SEND_AR_VIEW`.
+- Setting the message object to the bitmap `result`.
+- Sending the image message by using `mSenderHandler.sendMessage()`.
 
 ``` Java
         Bitmap result = bitmap.copy(Bitmap.Config.ARGB_8888,false);
@@ -1283,15 +1288,15 @@ Complete the method by retrieving the `Message` object using `Message.obtain()` 
 
 The `sendARView()` method sends the image snapshot of the AR view specified in the paramater `bitmap`.
 
-Ensure `bitmap` and `mSource.getConsumer()` are not `null` before continuing the send process.
+Make sure that `bitmap` and `mSource.getConsumer()` are not `null` before continuing the send process.
 
-Retrieve the width and height of `bitmap` using `bitmap.getWidth()` and `bitmap.getHeight()`.
+1. Retrieve the width and height of `bitmap` using `bitmap.getWidth()` and `bitmap.getHeight()`.
 
-Calculate `size` by multiplying `bitmap.getRowBytes()` with `bitmap.getHeight()` and apply it to a `ByteBuffer` object using `ByteBuffer.allocate()`.
+2. Calculate the `size` by multiplying `bitmap.getRowBytes()` with `bitmap.getHeight()` and apply it to a `ByteBuffer` object using `ByteBuffer.allocate()`.
 
-Copy the buffer pixels to the bitmap using `bitmap.copyPixelsToBuffer()`.
+3. Copy the buffer pixels to the bitmap using `bitmap.copyPixelsToBuffer()`.
 
-Complete the method by applying `data` array to `mSource` using `getConsumer().consumeByteArrayFrame()`.
+4. Complete the method by applying the `data` array to the `mSource` using `getConsumer().consumeByteArrayFrame()`.
 
 ``` Java
     private void sendARView(Bitmap bitmap) {
@@ -1316,9 +1321,9 @@ Complete the method by applying `data` array to `mSource` using `getConsumer().c
 
 The `addRemoteRender()` method adds a new Agora video renderer to the Agora RTC engine.
 
-- Create a new `AgoraVideoRender` object applying the user's `uid`.
-- Add `render` to the list of remote renderers using `mRemoteRenders.add()`.
-- Set the remote video renderer for `uid` using `mRtcEngine.setRemoteVideoRenderer()`.
+1. Create a new `AgoraVideoRender` object applying the user's `uid`.
+2. Add `render` to the list of remote renderers using `mRemoteRenders.add()`.
+3. Set the remote video renderer for `uid` using `mRtcEngine.setRemoteVideoRenderer()`.
 
 ``` Java
     private void addRemoteRender(int uid) {
@@ -1334,10 +1339,10 @@ The following private static variables are used as constants for the permission 
 
 Variable|Value|Description
 ---|---|---
-`BASE_VALUE_PERMISSION`|`0X0001`|Base value used for permission calculations
-`PERMISSION_REQ_ID_RECORD_AUDIO`|`BASE_VALUE_PERMISSION + 1`|ID value used for audio recording permissions
-`PERMISSION_REQ_ID_CAMERA`|`BASE_VALUE_PERMISSION + 2`|ID value used for camera permissions
-`PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE`|`BASE_VALUE_PERMISSION + 3`|ID value used for external storage permissions
+`BASE_VALUE_PERMISSION`|`0X0001`|Base value used for permission calculations.
+`PERMISSION_REQ_ID_RECORD_AUDIO`|`BASE_VALUE_PERMISSION + 1`|ID value used for audio recording permissions.
+`PERMISSION_REQ_ID_CAMERA`|`BASE_VALUE_PERMISSION + 2`|ID value used for camera permissions.
+`PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE`|`BASE_VALUE_PERMISSION + 3`|ID value used for external storage permissions.
 
 
 ``` Java
@@ -1349,9 +1354,11 @@ Variable|Value|Description
 
 The `checkSelfPermissions()` methods provide options to check all device permissions or to check permissions for a specific permission type.
 
-If no permission type is specified, check all the permission types are enabled and return the result.
+- If no permission type is specified, check that all the permission types are enabled and return the result.
 
-If a permission type is specified, check for granted device permissions using `ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED`. If permissions have not been granted yet, request permissions using `ActivityCompat.requestPermissions()`. 
+- If a permission type is specified, check for granted device permissions using `ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED`.
+
+- If permissions have not been granted yet, request permissions using `ActivityCompat.requestPermissions()`. 
 
 ``` Java
     private boolean checkSelfPermissions() {
@@ -1374,11 +1381,11 @@ If a permission type is specified, check for granted device permissions using `C
 
 ### Add Button Methods
 
-The following methods are applied to buttons in the UI layout.
+The following methods are applied to buttons in the UI layout:
 
-The `switchMode()` method toggles AR mode on / off.
+- The `switchMode()` method toggles the AR mode on and off.
 
-Update the `button` text using `button.setText()`. `R.string.ar_mode` indicates AR Mode, and `R.string.agora_mode` indicates Agora mode.
+Update the `button` text using `button.setText()`. `R.string.ar_mode` indicates the AR mode, and `R.string.agora_mode` indicates the Agora mode.
 
 ``` Java
     private void switchMode(Button button) {
@@ -1387,7 +1394,7 @@ Update the `button` text using `button.setText()`. `R.string.ar_mode` indicates 
     }
 ```
 
-The `showPointCloud()` method displays / hides the cloud points.
+- The `showPointCloud()` method shows/hides the cloud points.
 
 Update the `button` text using `button.setText()`. `R.string.show_point` is the text indicator to show points, and `R.string.hide_point` is the text indicator to hide points.
 
@@ -1398,7 +1405,7 @@ Update the `button` text using `button.setText()`. `R.string.show_point` is the 
     }
 ```
 
-The `showPlane()` method displays / hides the plane.
+- The `showPlane()` method shows/hides the plane.
 
 Update the `button` text using `button.setText()`. `R.string.show_plane` is the text indicator to show points, and `R.string.hide_plane` is the text indicator to hide points.
 
@@ -1411,9 +1418,9 @@ Update the `button` text using `button.setText()`. `R.string.show_plane` is the 
 
 ### Add App Setting Retrieval Methods
 
-The following methods are used to retrieve settings applied to the app.
+The following methods are used to retrieve settings applied to the app:
 
-The `isARMode()` method returns `mIsARMode` and indicates if the app is in AR mode.
+- The `isARMode()` method returns `mIsARMode` and indicates if the app is in AR mode.
 
 ``` Java
     private boolean isARMode() {
@@ -1421,7 +1428,7 @@ The `isARMode()` method returns `mIsARMode` and indicates if the app is in AR mo
     }
 ```
 
-The `isShowPointCloud()` method returns `!mHidePoint` and indicates if the app should show the point cloud.
+- The `isShowPointCloud()` method returns `!mHidePoint` and indicates if the app should show the point cloud.
 
 ``` Java
     private boolean isShowPointCloud() {
@@ -1429,7 +1436,7 @@ The `isShowPointCloud()` method returns `!mHidePoint` and indicates if the app s
     }
 ```
 
-The `isShowPlane()` method returns `!mHidePlane` and indicates if the app should show the plane.
+- The `isShowPlane()` method returns `!mHidePlane` and indicates if the app should show the plane.
 
 
 ``` Java
@@ -1439,8 +1446,8 @@ The `isShowPlane()` method returns `!mHidePlane` and indicates if the app should
 ```
 
 ## Resources
-* You can find full API documentation at the [Document Center](https://docs.agora.io/en/).
-* You can file bugs about this sample [here](https://github.com/AgoraIO/Agora-Video-With-ARCore/issues).
+* Find full [API documentation at the Document Center](https://docs.agora.io/en/).
+* [File bugs about this sample](https://github.com/AgoraIO/Agora-Video-With-ARCore/issues).
 
 
 ## License
