@@ -269,10 +269,10 @@ The remaining private variables are used to handle what is displayed on the scre
 
 Variable|Description
 ---|---
-`mIsARMode`|A Boolean to manage if the user is in AR mode.
-`mHidePoint`|A Boolean to manage if a point should be hidden.
-`mHidePlane`|A Boolean to manage if a plane should be hidden.
-`mScaleFactor`|A float value to manage the factor to scale by.
+`mIsARMode`|Determines if the user is in AR mode.
+`mHidePoint`|Determines if a point should be hidden.
+`mHidePlane`|Determines if a plane should be hidden.
+`mScaleFactor`|A float value to manage the factor used for scaling.
 `mRtcEventHandler`|An Agora RTC engine event handler.
 `mPeerObject`|A renderer for the peer.
 `mRemoteRenders`|An array of Agora video renderers for remote users.
@@ -305,7 +305,7 @@ The sample application uses superclass override methods to initialize the applic
 
 The `onCreate()` method is invoked once the activity is created. The `R.layout.activity_main` is applied as the screen layout using `setContentView()`.
 
-The `mSurfaceView` variable is with the `surfaceview` object from the UI layout.
+The `mSurfaceView` variable is associated with the `surfaceview` object from the UI layout.
 
 ``` Java
     @Override
